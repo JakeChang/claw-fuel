@@ -1,0 +1,59 @@
+/* General */
+"app.title" = "Claw-Fuel";
+
+/* Usage Cards */
+"session" = "Session";
+"weekly" = "Weekly";
+"sonnet" = "Sonnet";
+"session.window" = "5 小時";
+"weekly.window" = "7 天";
+"reset.prefix" = "重置：";
+"reset.soon" = "即將重置";
+"reset.in.dhm" = "%dd %dh";
+"reset.in.hm" = "%dh %dm";
+"reset.in.m" = "%dm";
+"reset.suffix" = "後";
+
+/* Login */
+"login.title" = "登入 Claude";
+"login.prompt" = "請先登入 Claude 帳號";
+"login.connect" = "連接 Claude";
+"login.reconnect" = "重新連接";
+"login.cancel" = "取消";
+"login.expired" = "登入已過期，請重新連接";
+
+/* Footer */
+"settings.title" = "設定";
+"show.remaining" = "顯示剩餘";
+"launch.at.login" = "開機啟動";
+"logout" = "登出";
+"quit" = "結束";
+
+/* Projection */
+"projection.title" = "重置前預估";
+"projection.collecting" = "收集數據中...";
+"projection.calculating" = "計算中";
+"projection.rate" = "%@%%/h";
+
+/* Trend Chart */
+"trend.title" = "趨勢圖";
+"trend.collecting" = "資料收集中...";
+
+/* Hourly Chart */
+"hourly.title" = "每小時用量分佈";
+"hourly.peak" = "尖峰：%@:00";
+"hourly.total" = "累計：%@%%";
+
+/* Notifications */
+"notif.session.warning.title" = "Claude Session 用量警告";
+"notif.session.warning.body" = "Session 用量已達 %d%%，即將到達上限";
+"notif.weekly.warning.title" = "Claude Weekly 用量警告";
+"notif.weekly.warning.body" = "Weekly 用量已達 %d%%，即將到達上限";
+"notif.session.reset.title" = "Session 額度已恢復";
+"notif.weekly.reset.title" = "Weekly 額度已恢復";
+"notif.reset.body" = "可以繼續使用 Claude 了";
+
+/* Errors */
+"error.no.org" = "找不到 Claude 組織";
+"error.invalid.response" = "無效的 API 回應";
+"error.unauthorized" = "登入已過期，請重新設定";

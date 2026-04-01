@@ -1,0 +1,59 @@
+/* General */
+"app.title" = "Claw-Fuel";
+
+/* Usage Cards */
+"session" = "Session";
+"weekly" = "Weekly";
+"sonnet" = "Sonnet";
+"session.window" = "5 Hours";
+"weekly.window" = "7 Days";
+"reset.prefix" = "Reset:";
+"reset.soon" = "Resetting soon";
+"reset.in.dhm" = "%dd %dh";
+"reset.in.hm" = "%dh %dm";
+"reset.in.m" = "%dm";
+"reset.suffix" = "left";
+
+/* Login */
+"login.title" = "Log in to Claude";
+"login.prompt" = "Please log in to your Claude account";
+"login.connect" = "Connect Claude";
+"login.reconnect" = "Reconnect";
+"login.cancel" = "Cancel";
+"login.expired" = "Login expired, please reconnect";
+
+/* Footer */
+"settings.title" = "Settings";
+"show.remaining" = "Show Remaining";
+"launch.at.login" = "Launch at Login";
+"logout" = "Log Out";
+"quit" = "Quit";
+
+/* Projection */
+"projection.title" = "Reset Projection";
+"projection.collecting" = "Collecting data...";
+"projection.calculating" = "Calculating";
+"projection.rate" = "%@%%/h";
+
+/* Trend Chart */
+"trend.title" = "Trend";
+"trend.collecting" = "Collecting data...";
+
+/* Hourly Chart */
+"hourly.title" = "Hourly Usage";
+"hourly.peak" = "Peak: %@:00";
+"hourly.total" = "Total: %@%%";
+
+/* Notifications */
+"notif.session.warning.title" = "Claude Session Usage Warning";
+"notif.session.warning.body" = "Session usage at %d%%, approaching limit";
+"notif.weekly.warning.title" = "Claude Weekly Usage Warning";
+"notif.weekly.warning.body" = "Weekly usage at %d%%, approaching limit";
+"notif.session.reset.title" = "Session Quota Restored";
+"notif.weekly.reset.title" = "Weekly Quota Restored";
+"notif.reset.body" = "Claude is ready to use again";
+
+/* Errors */
+"error.no.org" = "Claude organization not found";
+"error.invalid.response" = "Invalid API response";
+"error.unauthorized" = "Login expired, please reconnect";
