@@ -6,19 +6,93 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		23514C842F7E20FC00944FCE /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23514C832F7E20FC00944FCE /* WidgetKit.framework */; };
+		23514C862F7E20FC00944FCE /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 23514C852F7E20FC00944FCE /* SwiftUI.framework */; };
+		23514C932F7E20FD00944FCE /* ClawFuelWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 23514C812F7E20FC00944FCE /* ClawFuelWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		23514C9E2F7E215900944FCE /* SharedUsageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23514C9C2F7E215900944FCE /* SharedUsageData.swift */; };
+		23514C9F2F7E215900944FCE /* SharedUsageData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23514C9C2F7E215900944FCE /* SharedUsageData.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		23514C912F7E20FD00944FCE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 23A5D99A2F7CB0400031367C /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 23514C802F7E20FC00944FCE;
+			remoteInfo = ClawFuelWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		23514C942F7E20FD00944FCE /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				23514C932F7E20FD00944FCE /* ClawFuelWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		23514C812F7E20FC00944FCE /* ClawFuelWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = ClawFuelWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		23514C832F7E20FC00944FCE /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		23514C852F7E20FC00944FCE /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		23514C9C2F7E215900944FCE /* SharedUsageData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedUsageData.swift; sourceTree = "<group>"; };
+		23514CA02F7E21C100944FCE /* ClawFuelWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ClawFuelWidgetExtension.entitlements; sourceTree = "<group>"; };
 		23A5D9A22F7CB0400031367C /* claude_usage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = claude_usage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		23514C972F7E20FD00944FCE /* Exceptions for "ClawFuelWidget" folder in "ClawFuelWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 23514C802F7E20FC00944FCE /* ClawFuelWidgetExtension */;
+		};
+		23514CA22F7E221E00944FCE /* Exceptions for "claude_usage" folder in "ClawFuelWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"/Localized: Localizable.strings",
+			);
+			target = 23514C802F7E20FC00944FCE /* ClawFuelWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		23514C872F7E20FC00944FCE /* ClawFuelWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				23514C972F7E20FD00944FCE /* Exceptions for "ClawFuelWidget" folder in "ClawFuelWidgetExtension" target */,
+			);
+			path = ClawFuelWidget;
+			sourceTree = "<group>";
+		};
 		23A5D9A42F7CB0400031367C /* claude_usage */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				23514CA22F7E221E00944FCE /* Exceptions for "claude_usage" folder in "ClawFuelWidgetExtension" target */,
+			);
 			path = claude_usage;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		23514C7E2F7E20FC00944FCE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23514C862F7E20FC00944FCE /* SwiftUI.framework in Frameworks */,
+				23514C842F7E20FC00944FCE /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		23A5D99F2F7CB0400031367C /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -29,10 +103,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		23514C822F7E20FC00944FCE /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				23514C832F7E20FC00944FCE /* WidgetKit.framework */,
+				23514C852F7E20FC00944FCE /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		23514C9D2F7E215900944FCE /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				23514C9C2F7E215900944FCE /* SharedUsageData.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
 		23A5D9992F7CB0400031367C = {
 			isa = PBXGroup;
 			children = (
+				23514CA02F7E21C100944FCE /* ClawFuelWidgetExtension.entitlements */,
+				23514C9D2F7E215900944FCE /* Shared */,
 				23A5D9A42F7CB0400031367C /* claude_usage */,
+				23514C872F7E20FC00944FCE /* ClawFuelWidget */,
+				23514C822F7E20FC00944FCE /* Frameworks */,
 				23A5D9A32F7CB0400031367C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -41,6 +136,7 @@
 			isa = PBXGroup;
 			children = (
 				23A5D9A22F7CB0400031367C /* claude_usage.app */,
+				23514C812F7E20FC00944FCE /* ClawFuelWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -48,6 +144,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		23514C802F7E20FC00944FCE /* ClawFuelWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 23514C982F7E20FD00944FCE /* Build configuration list for PBXNativeTarget "ClawFuelWidgetExtension" */;
+			buildPhases = (
+				23514C7D2F7E20FC00944FCE /* Sources */,
+				23514C7E2F7E20FC00944FCE /* Frameworks */,
+				23514C7F2F7E20FC00944FCE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				23514C872F7E20FC00944FCE /* ClawFuelWidget */,
+			);
+			name = ClawFuelWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = ClawFuelWidgetExtension;
+			productReference = 23514C812F7E20FC00944FCE /* ClawFuelWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		23A5D9A12F7CB0400031367C /* claude_usage */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 23A5D9AD2F7CB0420031367C /* Build configuration list for PBXNativeTarget "claude_usage" */;
@@ -55,10 +173,12 @@
 				23A5D99E2F7CB0400031367C /* Sources */,
 				23A5D99F2F7CB0400031367C /* Frameworks */,
 				23A5D9A02F7CB0400031367C /* Resources */,
+				23514C942F7E20FD00944FCE /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				23514C922F7E20FD00944FCE /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				23A5D9A42F7CB0400031367C /* claude_usage */,
@@ -80,6 +200,9 @@
 				LastSwiftUpdateCheck = 2640;
 				LastUpgradeCheck = 2640;
 				TargetAttributes = {
+					23514C802F7E20FC00944FCE = {
+						CreatedOnToolsVersion = 26.4;
+					};
 					23A5D9A12F7CB0400031367C = {
 						CreatedOnToolsVersion = 26.4;
 					};
@@ -101,11 +224,19 @@
 			projectRoot = "";
 			targets = (
 				23A5D9A12F7CB0400031367C /* claude_usage */,
+				23514C802F7E20FC00944FCE /* ClawFuelWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		23514C7F2F7E20FC00944FCE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		23A5D9A02F7CB0400031367C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -116,16 +247,101 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		23514C7D2F7E20FC00944FCE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				23514C9E2F7E215900944FCE /* SharedUsageData.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		23A5D99E2F7CB0400031367C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				23514C9F2F7E215900944FCE /* SharedUsageData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		23514C922F7E20FD00944FCE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 23514C802F7E20FC00944FCE /* ClawFuelWidgetExtension */;
+			targetProxy = 23514C912F7E20FD00944FCE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		23514C952F7E20FD00944FCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = ClawFuelWidget/ClawFuelWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JRH8E985QQ;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ClawFuelWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ClawFuelWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "dev.jkone.claw-fuel.ClawFuelWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		23514C962F7E20FD00944FCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = ClawFuelWidget/ClawFuelWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = JRH8E985QQ;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ClawFuelWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = ClawFuelWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "dev.jkone.claw-fuel.ClawFuelWidget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		23A5D9AB2F7CB0420031367C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -319,6 +535,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		23514C982F7E20FD00944FCE /* Build configuration list for PBXNativeTarget "ClawFuelWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				23514C952F7E20FD00944FCE /* Debug */,
+				23514C962F7E20FD00944FCE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		23A5D99D2F7CB0400031367C /* Build configuration list for PBXProject "claude_usage" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

@@ -53,6 +53,11 @@
 "notif.weekly.reset.title" = "Weekly 額度已恢復";
 "notif.reset.body" = "可以繼續使用 Claude 了";
 
+/* Widget */
+"widget.title" = "Claude 用量";
+"widget.description" = "一覽 Claude AI 的使用量";
+"widget.not.logged.in" = "請先開啟 Claw-Fuel 登入";
+
 /* Errors */
 "error.no.org" = "找不到 Claude 組織";
 "error.invalid.response" = "無效的 API 回應";

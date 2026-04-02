@@ -3,7 +3,6 @@ import WebKit
 
 struct LoginWebView: View {
     var viewModel: UsageViewModel
-    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         VStack(spacing: 0) {
@@ -11,7 +10,9 @@ struct LoginWebView: View {
                 Text(String(localized: "login.title"))
                     .font(.headline)
                 Spacer()
-                Button(String(localized: "login.cancel")) { dismiss() }
+                Button(String(localized: "login.cancel")) {
+                    NSApp.keyWindow?.close()
+                }
                     .buttonStyle(.borderless)
             }
             .padding(12)
@@ -20,7 +21,7 @@ struct LoginWebView: View {
 
             WebViewWrapper(onLoginSuccess: { cookies in
                 viewModel.handleLoginSuccess(cookies: cookies)
-                dismiss()
+                NSApp.keyWindow?.close()
             })
         }
         .frame(width: 900, height: 700)
@@ -34,6 +35,7 @@ struct WebViewWrapper: NSViewRepresentable {
         let config = WKWebViewConfiguration()
         config.websiteDataStore = .default()
         let webView = WKWebView(frame: .zero, configuration: config)
+        webView.customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.3 Safari/605.1.15"
         webView.navigationDelegate = context.coordinator
         context.coordinator.webView = webView
         context.coordinator.startURLObservation(webView)

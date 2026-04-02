@@ -53,6 +53,11 @@
 "notif.weekly.reset.title" = "Weekly Quota Restored";
 "notif.reset.body" = "Claude is ready to use again";
 
+/* Widget */
+"widget.title" = "Claude Usage";
+"widget.description" = "Monitor your Claude AI usage at a glance";
+"widget.not.logged.in" = "Open Claw-Fuel to log in";
+
 /* Errors */
 "error.no.org" = "Claude organization not found";
 "error.invalid.response" = "Invalid API response";

@@ -1,7 +1,14 @@
 import SwiftUI
 
+class AppDelegate: NSObject, NSApplicationDelegate {
+    func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
+        return false
+    }
+}
+
 @main
 struct claude_usageApp: App {
+    @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @State private var viewModel = UsageViewModel()
 
     var body: some Scene {
@@ -17,11 +24,6 @@ struct claude_usageApp: App {
             }
         }
         .menuBarExtraStyle(.window)
-
-        Window("登入 Claude", id: "login") {
-            LoginWebView(viewModel: viewModel)
-        }
-        .windowResizability(.contentSize)
     }
 
     private var menuBarIcon: String {

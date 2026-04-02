@@ -10,7 +10,6 @@ private struct ContentHeightKey: PreferenceKey {
 
 struct UsagePopoverView: View {
     var viewModel: UsageViewModel
-    @Environment(\.openWindow) private var openWindow
     @State private var showSettings = false
     @State private var contentHeight: CGFloat = 0
     @State private var maxScrollHeight: CGFloat = 600
@@ -130,7 +129,7 @@ struct UsagePopoverView: View {
                 .font(.callout)
                 .foregroundStyle(.secondary)
             Button(String(localized: "login.connect")) {
-                openWindow(id: "login")
+                LoginWindowController.show(viewModel: viewModel)
             }
             .buttonStyle(.borderedProminent)
             .tint(.purple)
@@ -152,7 +151,7 @@ struct UsagePopoverView: View {
                     .foregroundStyle(.secondary)
             }
             Button(String(localized: "login.reconnect")) {
-                openWindow(id: "login")
+                LoginWindowController.show(viewModel: viewModel)
             }
             .buttonStyle(.borderedProminent)
             .tint(.purple)

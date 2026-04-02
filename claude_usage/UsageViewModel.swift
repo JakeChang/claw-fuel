@@ -2,6 +2,7 @@ import Foundation
 import Observation
 import ServiceManagement
 import UserNotifications
+import WidgetKit
 
 @Observable
 class UsageViewModel {
@@ -149,6 +150,23 @@ class UsageViewModel {
         usageHistory = history.filter { $0.date > cutoff }
     }
 
+    // MARK: - Widget Sync
+
+    private func writeToSharedDefaults() {
+        let shared = SharedUsageData(
+            sessionUtilization: sessionUtilization,
+            weeklyUtilization: weeklyUtilization,
+            weeklySonnetUtilization: weeklySonnetUtilization,
+            sessionResetsAt: sessionResetsAt,
+            weeklyResetsAt: weeklyResetsAt,
+            weeklySonnetResetsAt: weeklySonnetResetsAt,
+            lastUpdated: lastUpdated ?? Date(),
+            isLoggedIn: isLoggedIn
+        )
+        AppGroupConstants.write(shared)
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+
     // MARK: - Cookie Management
 
     func handleLoginSuccess(cookies: [HTTPCookie]) {
@@ -169,6 +187,7 @@ class UsageViewModel {
         weeklySonnetUtilization = nil
         lastUpdated = nil
         error = nil
+        writeToSharedDefaults()
     }
 
     private func saveCookies(_ cookies: [HTTPCookie]) {
@@ -229,6 +248,7 @@ class UsageViewModel {
             lastUpdated = Date()
             recordHistory()
             checkAndNotify()
+            writeToSharedDefaults()
         } catch is ClaudeAPIError {
             isLoggedIn = false
             clearCookies()
