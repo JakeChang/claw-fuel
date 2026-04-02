@@ -101,7 +101,9 @@ class ClaudeAPI {
         if let num = util as? Double { value = num }
         else if let num = util as? Int { value = Double(num) }
         else if let str = util as? String, let num = Double(str) { value = num }
-        return value > 1 ? value / 100.0 : value
+        // API 回傳 0.0-1.0 的小數，但若格式為百分比整數（>1）則轉換
+        if value > 1.0 { value /= 100.0 }
+        return min(max(value, 0.0), 1.0)
     }
 
     private func parseResetDate(from window: Any?) -> Date? {
