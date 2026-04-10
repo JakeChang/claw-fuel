@@ -235,14 +235,10 @@ class UsageViewModel {
 
         do {
             let usage = try await ClaudeAPI.shared.fetchUsage()
-            if let v = usage.sessionUtilization {
-                sessionUtilization = v
-                sessionResetsAt = usage.sessionResetsAt
-            }
-            if let v = usage.weeklyUtilization {
-                weeklyUtilization = v
-                weeklyResetsAt = usage.weeklyResetsAt
-            }
+            sessionUtilization = usage.sessionUtilization ?? 0
+            sessionResetsAt = usage.sessionResetsAt
+            weeklyUtilization = usage.weeklyUtilization ?? 0
+            weeklyResetsAt = usage.weeklyResetsAt
             weeklySonnetUtilization = usage.weeklySonnetUtilization
             weeklySonnetResetsAt = usage.weeklySonnetResetsAt
             lastUpdated = Date()

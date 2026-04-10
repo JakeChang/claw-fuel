@@ -889,11 +889,12 @@ struct HourlyUsageView: View {
 
     private var hourlyData: [HourlyBucket] {
         var buckets = Array(repeating: 0.0, count: 24)
-        let sorted = history.sorted { $0.date < $1.date }
-        for i in 1..<sorted.count {
-            let delta = (sorted[i].session - sorted[i - 1].session) * 100.0
+        let startOfToday = Calendar.current.startOfDay(for: Date())
+        let todayRecords = history.filter { $0.date >= startOfToday }.sorted { $0.date < $1.date }
+        for i in 1..<todayRecords.count {
+            let delta = (todayRecords[i].session - todayRecords[i - 1].session) * 100.0
             if delta > 0 {
-                let hour = Calendar.current.component(.hour, from: sorted[i].date)
+                let hour = Calendar.current.component(.hour, from: todayRecords[i].date)
                 buckets[hour] += delta
             }
         }
