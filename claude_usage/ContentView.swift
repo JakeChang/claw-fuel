@@ -718,19 +718,30 @@ struct ProjectionChartView: View {
     let sessionResetsAt: Date?
     let weeklyResetsAt: Date?
 
-    private var hasEnoughData: Bool {
-        guard let first = history.first, let last = history.last else { return false }
-        return last.date.timeIntervalSince(first.date) >= 1800
+    /// 取得當前重置窗口內的歷史紀錄
+    private func windowRecords(resetsAt: Date?, windowSeconds: TimeInterval) -> [UsageRecord] {
+        let now = Date()
+        let windowStart: Date
+        if let resetsAt, resetsAt > now {
+            windowStart = resetsAt.addingTimeInterval(-windowSeconds)
+        } else {
+            windowStart = now.addingTimeInterval(-windowSeconds)
+        }
+        return history
+            .filter { $0.date >= windowStart && $0.date <= now }
+            .sorted { $0.date < $1.date }
     }
 
-    private func computeRate(_ keyPath: KeyPath<UsageRecord, Double>) -> Double? {
-        guard hasEnoughData else { return nil }
-        let sorted = history.sorted { $0.date < $1.date }
-        guard let first = sorted.first, let last = sorted.last, first.date != last.date else { return nil }
-        let dt = last.date.timeIntervalSince(first.date) / 3600.0
+    private func computeRate(_ keyPath: KeyPath<UsageRecord, Double>, resetsAt: Date?, windowSeconds: TimeInterval) -> Double? {
+        let records = windowRecords(resetsAt: resetsAt, windowSeconds: windowSeconds)
+        guard records.count >= 2 else { return nil }
+        guard let first = records.first, let last = records.last else { return nil }
+        let dt = last.date.timeIntervalSince(first.date)
+        guard dt >= 600 else { return nil } // 至少 10 分鐘的資料
+        let dtHours = dt / 3600.0
         let dv = (last[keyPath: keyPath] - first[keyPath: keyPath]) * 100.0
-        let rate = dv / dt
-        return rate > 0.1 ? rate : nil
+        let rate = dv / dtHours
+        return rate > 0 ? rate : nil
     }
 
     private func projected(current: Double, rate: Double?, resetAt: Date?) -> Int? {
@@ -752,8 +763,8 @@ struct ProjectionChartView: View {
     var body: some View {
         let currentSession = history.last?.session ?? 0
         let currentWeekly = history.last?.weekly ?? 0
-        let sessionRate = computeRate(\.session)
-        let weeklyRate = computeRate(\.weekly)
+        let sessionRate = computeRate(\.session, resetsAt: sessionResetsAt, windowSeconds: 5 * 3600)
+        let weeklyRate = computeRate(\.weekly, resetsAt: weeklyResetsAt, windowSeconds: 7 * 24 * 3600)
         let sessionProjected = projected(current: currentSession, rate: sessionRate, resetAt: sessionResetsAt)
         let weeklyProjected = projected(current: currentWeekly, rate: weeklyRate, resetAt: weeklyResetsAt)
 
@@ -766,7 +777,7 @@ struct ProjectionChartView: View {
                     .font(.caption.weight(.medium))
                     .foregroundStyle(.secondary)
                 Spacer()
-                if !hasEnoughData {
+                if sessionRate == nil && weeklyRate == nil {
                     Text(String(localized: "projection.collecting"))
                         .font(.system(size: 8))
                         .foregroundStyle(.tertiary)

@@ -101,8 +101,8 @@ class ClaudeAPI {
         if let num = util as? Double { value = num }
         else if let num = util as? Int { value = Double(num) }
         else if let str = util as? String, let num = Double(str) { value = num }
-        // API 回傳 0.0-1.0 的小數，但若格式為百分比整數（>1）則轉換
-        if value > 1.0 { value /= 100.0 }
+        // API 回傳整數百分比（0-100），需除以 100 轉為 0.0-1.0
+        if value >= 1.0 { value /= 100.0 }
         return min(max(value, 0.0), 1.0)
     }
 
