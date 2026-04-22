@@ -277,7 +277,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.6;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.jkone.claw-fuel";
 				PRODUCT_NAME = "Claw-Fuel";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -313,7 +313,7 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 15.6;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "dev.jkone.claw-fuel";
 				PRODUCT_NAME = "Claw-Fuel";
 				PROVISIONING_PROFILE_SPECIFIER = "";

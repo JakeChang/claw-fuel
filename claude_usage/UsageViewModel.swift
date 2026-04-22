@@ -23,9 +23,13 @@ class UsageViewModel {
     private var hasNotified90Weekly = false
     private var lastScheduledSessionReset: Date?
     private var lastScheduledWeeklyReset: Date?
+    private var isUpdatingLaunchAtLogin = false
 
     var launchAtLogin: Bool = SMAppService.mainApp.status == .enabled {
         didSet {
+            guard !isUpdatingLaunchAtLogin else { return }
+            isUpdatingLaunchAtLogin = true
+            defer { isUpdatingLaunchAtLogin = false }
             do {
                 if launchAtLogin {
                     try SMAppService.mainApp.register()
