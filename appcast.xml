@@ -7,15 +7,15 @@
     <language>zh-Hant</language>
     <item>
       <title>Version 1.0.0</title>
-      <pubDate>Wed, 22 Apr 2026 07:38:20 +0000</pubDate>
+      <pubDate>Wed, 22 Apr 2026 14:41:32 +0000</pubDate>
       <sparkle:version>1.0.0</sparkle:version>
       <sparkle:shortVersionString>1.0.0</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
       <enclosure
         url="https://github.com/JakeChang/claw-fuel/releases/download/v1.0.0/Claw-Fuel-1.0.0.dmg"
-        length="1633523"
+        length="1894754"
         type="application/x-apple-diskimage"
-        sparkle:edSignature="I9anZRbmSUIgou3HiT20mUhdfw6GD/H5rPSC3U1pKS+ub+Re0rnKi7HShV7xq+AGCfwylQBY6XgFixL9GpbADg=="
+        sparkle:edSignature="bjmXVpfKKKIcf361qhnmCOHvZthFSOn0xE/jy2Nc8mZ/xwixG3thK756KNgB4jcql6iPnIRoDxmSuBqjf69uDg=="
       />
     </item>
   </channel>
