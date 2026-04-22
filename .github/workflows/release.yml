@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*.*.*'
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 permissions:
   contents: write
   pages: write
@@ -109,11 +112,15 @@ jobs:
           files: Claw-Fuel-${{ env.VERSION }}.dmg
           generate_release_notes: true
 
+      - name: Prepare appcast for deployment
+        run: |
+          mkdir -p gh-pages-dist
+          cp appcast.xml gh-pages-dist/appcast.xml
+
       - name: Deploy appcast.xml to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: .
+          publish_dir: gh-pages-dist
           publish_branch: gh-pages
-          include_files: appcast.xml
           keep_files: true
