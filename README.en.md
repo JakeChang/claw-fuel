@@ -29,9 +29,21 @@ Claw Fuel is a macOS menu bar application that keeps you informed about your Cla
 
 ## Getting Started
 
+### Download (Recommended)
+
+1. Go to [Releases](https://github.com/JakeChang/claw-fuel/releases) and download the latest `Claw-Fuel.zip`
+2. Unzip and move `Claw-Fuel.app` to `/Applications/`
+3. Since this app is not notarized by Apple, run the following in Terminal before opening it:
+   ```bash
+   xattr -cr /Applications/Claw-Fuel.app
+   ```
+4. Open the app, click the menu bar icon, and select "Connect Claude" to log in
+
+### Build from Source
+
 1. Clone the repository:
    ```bash
-   git clone https://github.com/anthropics/claw-fuel.git
+   git clone https://github.com/JakeChang/claw-fuel.git
    ```
 2. Open `claude_usage.xcodeproj` in Xcode
 3. Build & Run (⌘R)

@@ -29,9 +29,21 @@ Claw Fuel 是一款 macOS 選單列應用程式，讓你隨時掌握 Claude AI �
 
 ## 安裝與使用
 
+### 直接下載（推薦）
+
+1. 前往 [Releases](https://github.com/JakeChang/claw-fuel/releases) 下載最新的 `Claw-Fuel.zip`
+2. 解壓縮後將 `Claw-Fuel.app` 移至 `/Applications/`
+3. 由於本應用程式未經 Apple 公證，首次開啟前需在終端機執行：
+   ```bash
+   xattr -cr /Applications/Claw-Fuel.app
+   ```
+4. 開啟 App，在選單列點擊圖示，選「連接 Claude」進行登入
+
+### 從原始碼編譯
+
 1. Clone 此專案：
    ```bash
-   git clone https://github.com/anthropics/claw-fuel.git
+   git clone https://github.com/JakeChang/claw-fuel.git
    ```
 2. 用 Xcode 開啟 `claude_usage.xcodeproj`
 3. Build & Run（⌘R）

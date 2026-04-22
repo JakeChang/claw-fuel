@@ -26,6 +26,7 @@
 "settings.title" = "Settings";
 "show.remaining" = "Show Remaining";
 "launch.at.login" = "Launch at Login";
+"check.updates" = "Check for Updates…";
 "logout" = "Log Out";
 "quit" = "Quit";
 

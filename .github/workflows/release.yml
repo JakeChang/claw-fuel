@@ -1,0 +1,119 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-release:
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set version from tag
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
+      - name: Install create-dmg
+        run: brew install create-dmg
+
+      - name: Install Sparkle tools
+        run: |
+          SPARKLE_VERSION="2.6.4"
+          curl -L "https://github.com/sparkle-project/Sparkle/releases/download/${SPARKLE_VERSION}/Sparkle-${SPARKLE_VERSION}.tar.xz" -o sparkle.tar.xz
+          mkdir -p sparkle_tools
+          tar -xf sparkle.tar.xz -C sparkle_tools
+          echo "SPARKLE_BIN=$PWD/sparkle_tools/bin" >> $GITHUB_ENV
+
+      - name: Build app
+        run: |
+          xcodebuild \
+            -project claude_usage.xcodeproj \
+            -scheme claude_usage \
+            -configuration Release \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            MARKETING_VERSION=${{ env.VERSION }}
+
+      - name: Find built app
+        run: |
+          APP_PATH=$(find build -name "Claw-Fuel.app" -type d | head -1)
+          echo "APP_PATH=$APP_PATH" >> $GITHUB_ENV
+
+      - name: Create DMG
+        run: |
+          create-dmg \
+            --volname "Claw-Fuel" \
+            --window-pos 200 120 \
+            --window-size 600 400 \
+            --icon-size 100 \
+            --icon "Claw-Fuel.app" 150 185 \
+            --hide-extension "Claw-Fuel.app" \
+            --app-drop-link 450 185 \
+            "Claw-Fuel-${{ env.VERSION }}.dmg" \
+            "${{ env.APP_PATH }}"
+
+      - name: Sign DMG with Sparkle EdDSA key
+        run: |
+          echo "${{ secrets.SPARKLE_PRIVATE_KEY }}" | ${{ env.SPARKLE_BIN }}/sign_update \
+            --ed-key-file - \
+            "Claw-Fuel-${{ env.VERSION }}.dmg" > sparkle_sig.txt
+          cat sparkle_sig.txt
+          ED_SIGNATURE=$(cat sparkle_sig.txt | grep -o 'edSignature="[^"]*"' | cut -d'"' -f2)
+          FILE_SIZE=$(stat -f%z "Claw-Fuel-${{ env.VERSION }}.dmg")
+          echo "ED_SIGNATURE=$ED_SIGNATURE" >> $GITHUB_ENV
+          echo "FILE_SIZE=$FILE_SIZE" >> $GITHUB_ENV
+
+      - name: Update appcast.xml
+        run: |
+          RELEASE_DATE=$(date -u +"%a, %d %b %Y %H:%M:%S +0000")
+          DMG_URL="https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/Claw-Fuel-${{ env.VERSION }}.dmg"
+
+          cat > appcast.xml << EOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <channel>
+              <title>Claw-Fuel</title>
+              <link>https://jakechang.github.io/claw-fuel/appcast.xml</link>
+              <description>Claw-Fuel 更新記錄</description>
+              <language>zh-Hant</language>
+              <item>
+                <title>Version ${{ env.VERSION }}</title>
+                <pubDate>${RELEASE_DATE}</pubDate>
+                <sparkle:version>${{ env.VERSION }}</sparkle:version>
+                <sparkle:shortVersionString>${{ env.VERSION }}</sparkle:shortVersionString>
+                <sparkle:minimumSystemVersion>15.0</sparkle:minimumSystemVersion>
+                <enclosure
+                  url="${DMG_URL}"
+                  length="${{ env.FILE_SIZE }}"
+                  type="application/x-apple-diskimage"
+                  sparkle:edSignature="${{ env.ED_SIGNATURE }}"
+                />
+              </item>
+            </channel>
+          </rss>
+          EOF
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: Claw-Fuel-${{ env.VERSION }}.dmg
+          generate_release_notes: true
+
+      - name: Deploy appcast.xml to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .
+          publish_branch: gh-pages
+          include_files: appcast.xml
+          keep_files: true

@@ -10,6 +10,7 @@ private struct ContentHeightKey: PreferenceKey {
 
 struct UsagePopoverView: View {
     var viewModel: UsageViewModel
+    var onCheckForUpdates: () -> Void = {}
     @State private var showSettings = false
     @State private var contentHeight: CGFloat = 0
     @State private var maxScrollHeight: CGFloat = 600
@@ -79,7 +80,7 @@ struct UsagePopoverView: View {
     }
 
     private var usageContent: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: 6) {
             UsageCard(
                 icon: "bolt.fill",
                 title: String(localized: "session"),
@@ -112,10 +113,13 @@ struct UsagePopoverView: View {
                 sessionResetsAt: viewModel.sessionResetsAt,
                 weeklyResetsAt: viewModel.weeklyResetsAt
             )
+            .padding(.top, 6)
 
             UsageChartView(history: viewModel.usageHistory)
+                .padding(.top, 4)
 
             HourlyUsageView(history: viewModel.usageHistory)
+                .padding(.top, 4)
         }
         .padding(.horizontal, 16)
     }
@@ -197,11 +201,11 @@ struct UsagePopoverView: View {
             // Header
             HStack {
                 Image(systemName: "gearshape.fill")
-                    .font(.system(size: 10))
+                    .font(.caption2)
                 Text(String(localized: "settings.title"))
                     .font(.caption.weight(.semibold))
                 Text("v\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "")(\(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""))")
-                    .font(.system(size: 9))
+                    .font(.caption2)
                     .foregroundStyle(.tertiary)
                 Spacer()
                 Button {
@@ -264,6 +268,24 @@ struct UsagePopoverView: View {
 
             // Actions
             HStack(spacing: 0) {
+                Button {
+                    onCheckForUpdates()
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "arrow.down.circle")
+                            .font(.caption2)
+                        Text(String(localized: "check.updates"))
+                            .font(.caption)
+                    }
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 8)
+                }
+                .buttonStyle(.borderless)
+
+                Divider()
+                    .frame(height: 16)
+
                 if viewModel.isLoggedIn {
                     Button {
                         viewModel.logout()
@@ -271,7 +293,7 @@ struct UsagePopoverView: View {
                     } label: {
                         HStack(spacing: 4) {
                             Image(systemName: "rectangle.portrait.and.arrow.right")
-                                .font(.system(size: 9))
+                                .font(.caption2)
                             Text(String(localized: "logout"))
                                 .font(.caption)
                         }
@@ -290,7 +312,7 @@ struct UsagePopoverView: View {
                 } label: {
                     HStack(spacing: 4) {
                         Image(systemName: "power")
-                            .font(.system(size: 9))
+                            .font(.caption2)
                         Text(String(localized: "quit"))
                             .font(.caption)
                     }
@@ -325,22 +347,12 @@ struct UsageCard: View {
     private var percentage: Int { Int(displayValue * 100) }
     private var level: UsageLevel { UsageLevel.from(utilization) }
 
-    private var barColor: Color {
+    private var statusColor: Color {
         switch level {
-        case .normal: return Color(nsColor: .systemGreen)
-        case .warning: return Color(nsColor: .systemOrange)
-        case .danger: return Color(red: 0.9, green: 0.3, blue: 0.1)
-        case .critical: return Color(nsColor: .systemRed)
-        }
-    }
-
-    private var fuelColor: Color {
-        let remaining = 1.0 - utilization
-        switch remaining {
-        case ..<0.1: return Color(nsColor: .systemRed)
-        case ..<0.25: return Color(red: 0.9, green: 0.3, blue: 0.1)
-        case ..<0.5: return Color(nsColor: .systemOrange)
-        default: return Color(nsColor: .systemGreen)
+        case .normal: return Color(hue: 0.58, saturation: 0.45, brightness: 0.65)   // teal
+        case .warning: return Color(hue: 0.10, saturation: 0.55, brightness: 0.75)   // amber
+        case .danger: return Color(hue: 0.04, saturation: 0.60, brightness: 0.72)    // burnt orange
+        case .critical: return Color(hue: 0.98, saturation: 0.55, brightness: 0.68)  // muted red
         }
     }
 
@@ -375,7 +387,7 @@ struct UsageCard: View {
                 Spacer()
                 Text("\(percentage)%")
                     .font(.system(.title3, design: .rounded).monospacedDigit().bold())
-                    .foregroundStyle(barColor)
+                    .foregroundStyle(statusColor)
             }
 
             GeometryReader { geo in
@@ -383,22 +395,16 @@ struct UsageCard: View {
                     RoundedRectangle(cornerRadius: 3.5)
                         .fill(Color.primary.opacity(0.08))
                     RoundedRectangle(cornerRadius: 3.5)
-                        .fill(
-                            LinearGradient(
-                                colors: [barColor.opacity(0.8), barColor],
-                                startPoint: .leading,
-                                endPoint: .trailing
-                            )
-                        )
+                        .fill(statusColor)
                         .frame(width: max(geo.size.width * min(utilization, 1.0), 0))
                 }
             }
             .frame(height: 7)
 
             if let resetsAt {
-                HStack(spacing: 3) {
+                HStack(spacing: 4) {
                     Image(systemName: "clock.arrow.circlepath")
-                        .font(.system(size: 8))
+                        .font(.system(size: 10))
                     Text(formattedReset(resetsAt))
                         .font(.caption2)
                 }
@@ -410,10 +416,10 @@ struct UsageCard: View {
     // MARK: - Fuel Gauge Layout (remaining %)
 
     private var fuelGaugeLayout: some View {
-        VStack(spacing: 6) {
-            HStack(spacing: 4) {
+        VStack(spacing: 8) {
+            HStack(spacing: 5) {
                 Image(systemName: icon)
-                    .font(.caption2)
+                    .font(.caption)
                     .foregroundStyle(.secondary)
                 Text(title)
                     .font(.caption.weight(.medium))
@@ -422,18 +428,18 @@ struct UsageCard: View {
                     .foregroundStyle(.tertiary)
                 Spacer()
                 if let resetsAt {
-                    HStack(spacing: 2) {
+                    HStack(spacing: 3) {
                         Image(systemName: "clock.arrow.circlepath")
-                            .font(.system(size: 7))
+                            .font(.system(size: 10))
                         Text(formattedReset(resetsAt))
-                            .font(.system(size: 9))
+                            .font(.caption2)
                     }
                     .foregroundStyle(.secondary)
                 }
             }
 
-            FuelGaugeArc(value: displayValue, color: fuelColor, percentage: percentage)
-                .frame(height: 52)
+            FuelGaugeArc(value: displayValue, color: statusColor, percentage: percentage)
+                .frame(height: 60)
         }
     }
 
@@ -486,9 +492,9 @@ struct FuelGaugeArc: View {
     var body: some View {
         GeometryReader { geo in
             let h = geo.size.height
-            let r: CGFloat = h - 8
+            let r: CGFloat = h - 10
             let center = CGPoint(x: geo.size.width / 2, y: h - 2)
-            let lw: CGFloat = 6
+            let lw: CGFloat = 8
 
             ZStack {
                 // Background arc
@@ -507,7 +513,7 @@ struct FuelGaugeArc: View {
                              endAngle: .degrees(180 + 180 * min(value, 1.0)),
                              clockwise: false)
                 }
-                .stroke(color.gradient,
+                .stroke(color,
                         style: StrokeStyle(lineWidth: lw, lineCap: .round))
 
                 // Tick marks at 25%, 50%, 75%
@@ -517,7 +523,7 @@ struct FuelGaugeArc: View {
                         p.move(to: pt(center, r - lw / 2 - 1, a))
                         p.addLine(to: pt(center, r + lw / 2 + 1, a))
                     }
-                    .stroke(Color.primary.opacity(0.2), lineWidth: 0.5)
+                    .stroke(Color.primary.opacity(0.3), lineWidth: 1)
                 }
 
                 // Needle
@@ -526,23 +532,23 @@ struct FuelGaugeArc: View {
                     p.move(to: center)
                     p.addLine(to: pt(center, r - lw / 2 - 3, na))
                 }
-                .stroke(color, style: StrokeStyle(lineWidth: 1.5, lineCap: .round))
+                .stroke(color, style: StrokeStyle(lineWidth: 2.5, lineCap: .round))
 
-                Circle().fill(color).frame(width: 4, height: 4).position(center)
+                Circle().fill(color).frame(width: 6, height: 6).position(center)
 
                 // Percentage
                 Text("\(percentage)%")
-                    .font(.system(size: 12, design: .rounded).bold().monospacedDigit())
+                    .font(.system(size: 14, design: .rounded).bold().monospacedDigit())
                     .foregroundStyle(color)
                     .position(x: center.x, y: center.y - r * 0.5)
 
                 // E / F
-                Text("E").font(.system(size: 7, weight: .bold, design: .rounded))
-                    .foregroundStyle(.red.opacity(0.4))
-                    .position(x: center.x - r - lw - 3, y: center.y)
-                Text("F").font(.system(size: 7, weight: .bold, design: .rounded))
-                    .foregroundStyle(.green.opacity(0.4))
-                    .position(x: center.x + r + lw + 3, y: center.y)
+                Text("E").font(.system(size: 10, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color(hue: 0.98, saturation: 0.40, brightness: 0.60))
+                    .position(x: center.x - r - lw - 4, y: center.y)
+                Text("F").font(.system(size: 10, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color(hue: 0.58, saturation: 0.40, brightness: 0.60))
+                    .position(x: center.x + r + lw + 4, y: center.y)
             }
         }
     }
@@ -600,13 +606,13 @@ struct UsageChartView: View {
             }
 
             HStack(spacing: 10) {
-                HStack(spacing: 3) {
-                    Circle().fill(.purple).frame(width: 5, height: 5)
-                    Text(String(localized: "session")).font(.system(size: 9)).foregroundStyle(.secondary)
+                HStack(spacing: 4) {
+                    Circle().fill(.purple).frame(width: 6, height: 6)
+                    Text(String(localized: "session")).font(.caption2).foregroundStyle(.secondary)
                 }
-                HStack(spacing: 3) {
-                    Circle().fill(.blue).frame(width: 5, height: 5)
-                    Text(String(localized: "weekly")).font(.system(size: 9)).foregroundStyle(.secondary)
+                HStack(spacing: 4) {
+                    Circle().fill(.blue).frame(width: 6, height: 6)
+                    Text(String(localized: "weekly")).font(.caption2).foregroundStyle(.secondary)
                 }
                 Spacer()
             }
@@ -660,7 +666,7 @@ struct UsageChartView: View {
                             .foregroundStyle(Color.primary.opacity(0.08))
                         AxisValueLabel {
                             Text("\(value.as(Int.self) ?? 0)")
-                                .font(.system(size: 9, weight: .medium))
+                                .font(.system(size: 10, weight: .medium))
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -670,7 +676,7 @@ struct UsageChartView: View {
                         AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [2]))
                             .foregroundStyle(Color.primary.opacity(0.08))
                         AxisValueLabel(format: xAxisFormat)
-                            .font(.system(size: 9, weight: .medium))
+                            .font(.system(size: 10, weight: .medium))
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -779,7 +785,7 @@ struct ProjectionChartView: View {
                 Spacer()
                 if sessionRate == nil && weeklyRate == nil {
                     Text(String(localized: "projection.collecting"))
-                        .font(.system(size: 8))
+                        .font(.caption2)
                         .foregroundStyle(.tertiary)
                 }
             }
@@ -827,26 +833,42 @@ struct ProjectionGauge: View {
     var body: some View {
         VStack(spacing: 6) {
             Text(label)
-                .font(.system(size: 10, weight: .semibold))
+                .font(.caption2.weight(.semibold))
                 .foregroundStyle(.secondary)
 
             ZStack {
-                Circle()
-                    .stroke(Color.primary.opacity(0.06), lineWidth: 5)
+                Canvas { context, size in
+                    let rect = CGRect(origin: .zero, size: size).insetBy(dx: 3, dy: 3)
 
-                Circle()
-                    .trim(from: 0, to: CGFloat(current) / 100.0)
-                    .stroke(color, style: StrokeStyle(lineWidth: 5, lineCap: .round))
-                    .rotationEffect(.degrees(-90))
+                    // Background ring
+                    var bgPath = Path()
+                    bgPath.addEllipse(in: rect)
+                    context.stroke(bgPath, with: .color(Color.primary.opacity(0.06)), lineWidth: 5)
 
-                if let projected, projected > current {
-                    Circle()
-                        .trim(from: CGFloat(current) / 100.0, to: CGFloat(projected) / 100.0)
-                        .stroke(
-                            projected >= 90 ? Color.red.opacity(0.5) : color.opacity(0.3),
-                            style: StrokeStyle(lineWidth: 5, lineCap: .round, dash: [3, 3])
-                        )
-                        .rotationEffect(.degrees(-90))
+                    // Current usage arc
+                    let center = CGPoint(x: size.width / 2, y: size.height / 2)
+                    let radius = min(size.width, size.height) / 2 - 3
+                    var currentPath = Path()
+                    currentPath.addArc(center: center, radius: radius,
+                                       startAngle: .degrees(-90),
+                                       endAngle: .degrees(-90 + 360 * Double(current) / 100.0),
+                                       clockwise: false)
+                    context.stroke(currentPath, with: .color(color),
+                                   style: StrokeStyle(lineWidth: 5, lineCap: .round))
+
+                    // Projected dashed arc
+                    if let projected, projected > current {
+                        let projColor = projected >= 90
+                            ? Color(hue: 0.98, saturation: 0.45, brightness: 0.65)
+                            : color.opacity(0.3)
+                        var projPath = Path()
+                        projPath.addArc(center: center, radius: radius,
+                                        startAngle: .degrees(-90 + 360 * Double(current) / 100.0),
+                                        endAngle: .degrees(-90 + 360 * Double(projected) / 100.0),
+                                        clockwise: false)
+                        context.stroke(projPath, with: .color(projColor),
+                                       style: StrokeStyle(lineWidth: 5, lineCap: .round, dash: [3, 3]))
+                    }
                 }
 
                 VStack(spacing: 0) {
@@ -855,28 +877,28 @@ struct ProjectionGauge: View {
                         .foregroundStyle(color)
                     if let projected {
                         Text("→\(projected)%")
-                            .font(.system(size: 9, design: .rounded).monospacedDigit())
-                            .foregroundStyle(projected >= 90 ? .red : .secondary)
+                            .font(.system(size: 10, design: .rounded).monospacedDigit())
+                            .foregroundStyle(projected >= 90 ? Color(hue: 0.98, saturation: 0.45, brightness: 0.65) : .secondary)
                     } else {
                         Text(String(localized: "projection.calculating"))
-                            .font(.system(size: 8))
+                            .font(.caption2)
                             .foregroundStyle(.tertiary)
                     }
                 }
             }
-            .frame(width: 60, height: 60)
+            .frame(width: 64, height: 64)
 
-            VStack(spacing: 2) {
+            VStack(spacing: 3) {
                 if let rate {
                     Text("\(String(format: "%.0f", rate))%/h")
-                        .font(.system(size: 9, weight: .medium, design: .rounded))
+                        .font(.system(size: 10, weight: .medium, design: .rounded))
                         .foregroundStyle(.secondary)
                 }
-                HStack(spacing: 2) {
+                HStack(spacing: 3) {
                     Image(systemName: "clock")
-                        .font(.system(size: 7))
+                        .font(.system(size: 10))
                     Text(remaining)
-                        .font(.system(size: 9))
+                        .font(.caption2)
                 }
                 .foregroundStyle(.tertiary)
             }
@@ -927,7 +949,7 @@ struct HourlyUsageView: View {
                     .foregroundStyle(.secondary)
                 Spacer()
                 Text(String(localized: "session"))
-                    .font(.system(size: 8))
+                    .font(.caption2)
                     .foregroundStyle(.tertiary)
             }
 
@@ -951,7 +973,7 @@ struct HourlyUsageView: View {
                             .foregroundStyle(Color.primary.opacity(0.08))
                         AxisValueLabel {
                             Text("\(value.as(Int.self) ?? 0)%")
-                                .font(.system(size: 8, weight: .medium))
+                                .font(.system(size: 10, weight: .medium))
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -959,7 +981,7 @@ struct HourlyUsageView: View {
                 .chartXAxis {
                     AxisMarks(values: [0, 3, 6, 9, 12, 15, 18, 21].map { hourlyData[$0].label }) { _ in
                         AxisValueLabel()
-                            .font(.system(size: 8, weight: .medium))
+                            .font(.system(size: 10, weight: .medium))
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -981,24 +1003,25 @@ struct HourlyUsageView: View {
             let totalUsage = hourlyData.reduce(0) { $0 + $1.usage }
             if totalUsage > 0, let peak = peakHour, peak.usage > 0 {
                 HStack(spacing: 12) {
-                    HStack(spacing: 3) {
+                    HStack(spacing: 4) {
                         Image(systemName: "flame.fill")
-                            .font(.system(size: 8))
-                            .foregroundStyle(.orange)
+                            .font(.system(size: 10))
+                            .foregroundStyle(Color(hue: 0.10, saturation: 0.55, brightness: 0.75))
                         Text(String(format: String(localized: "hourly.peak"), String(format: "%02d", peak.hour)))
-                            .font(.system(size: 9))
+                            .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
-                    HStack(spacing: 3) {
+                    HStack(spacing: 4) {
                         Image(systemName: "sum")
-                            .font(.system(size: 8))
+                            .font(.system(size: 10))
                             .foregroundStyle(.purple)
                         Text(String(format: String(localized: "hourly.total"), String(format: "%.1f", totalUsage)))
-                            .font(.system(size: 9))
+                            .font(.caption2)
                             .foregroundStyle(.secondary)
                     }
                     Spacer()
                 }
+                .padding(.top, 2)
             }
         }
         .padding(12)

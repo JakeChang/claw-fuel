@@ -11,16 +11,16 @@ enum LoginWindowController {
             return
         }
 
-        let loginView = LoginWebView(viewModel: viewModel)
-        let hostingView = NSHostingView(rootView: loginView)
-
         let newWindow = NSWindow(
             contentRect: NSRect(x: 0, y: 0, width: 900, height: 700),
             styleMask: [.titled, .closable, .resizable],
             backing: .buffered,
             defer: false
         )
-        newWindow.contentView = hostingView
+        let loginView = LoginWebView(viewModel: viewModel) { [weak newWindow] in
+            newWindow?.close()
+        }
+        newWindow.contentView = NSHostingView(rootView: loginView)
         newWindow.title = String(localized: "login.title")
         newWindow.center()
         newWindow.isReleasedWhenClosed = false

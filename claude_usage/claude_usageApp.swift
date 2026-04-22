@@ -1,4 +1,5 @@
 import SwiftUI
+import Sparkle
 
 class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
@@ -10,10 +11,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 struct claude_usageApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @State private var viewModel = UsageViewModel()
+    private let updaterController = SPUStandardUpdaterController(
+        startingUpdater: true,
+        updaterDelegate: nil,
+        userDriverDelegate: nil
+    )
 
     var body: some Scene {
         MenuBarExtra {
-            UsagePopoverView(viewModel: viewModel)
+            UsagePopoverView(viewModel: viewModel) {
+                updaterController.checkForUpdates(nil)
+            }
         } label: {
             HStack(spacing: 3) {
                 Image(systemName: menuBarIcon)

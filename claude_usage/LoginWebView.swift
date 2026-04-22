@@ -1,8 +1,10 @@
 import SwiftUI
 import WebKit
+import AppKit
 
 struct LoginWebView: View {
     var viewModel: UsageViewModel
+    var closeWindow: () -> Void
 
     var body: some View {
         VStack(spacing: 0) {
@@ -11,7 +13,7 @@ struct LoginWebView: View {
                     .font(.headline)
                 Spacer()
                 Button(String(localized: "login.cancel")) {
-                    NSApp.keyWindow?.close()
+                    closeWindow()
                 }
                     .buttonStyle(.borderless)
             }
@@ -19,10 +21,12 @@ struct LoginWebView: View {
 
             Divider()
 
-            WebViewWrapper(onLoginSuccess: { cookies in
-                viewModel.handleLoginSuccess(cookies: cookies)
-                NSApp.keyWindow?.close()
-            })
+            WebViewWrapper(
+                onLoginSuccess: { cookies in
+                    viewModel.handleLoginSuccess(cookies: cookies)
+                    closeWindow()
+                }
+            )
         }
         .frame(width: 900, height: 700)
     }
@@ -37,6 +41,7 @@ struct WebViewWrapper: NSViewRepresentable {
         let webView = WKWebView(frame: .zero, configuration: config)
         webView.customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.3 Safari/605.1.15"
         webView.navigationDelegate = context.coordinator
+        webView.uiDelegate = context.coordinator
         context.coordinator.webView = webView
         context.coordinator.startURLObservation(webView)
         webView.load(URLRequest(url: URL(string: "https://claude.ai/login")!))
@@ -49,46 +54,86 @@ struct WebViewWrapper: NSViewRepresentable {
         Coordinator(onLoginSuccess: onLoginSuccess)
     }
 
-    class Coordinator: NSObject, WKNavigationDelegate {
+    class Coordinator: NSObject, WKNavigationDelegate, WKUIDelegate {
         var onLoginSuccess: @MainActor ([HTTPCookie]) -> Void
         private var hasReported = false
         weak var webView: WKWebView?
         private var urlObservation: NSKeyValueObservation?
+        private var pollTimer: Timer?
 
         init(onLoginSuccess: @MainActor @escaping ([HTTPCookie]) -> Void) {
             self.onLoginSuccess = onLoginSuccess
         }
 
         func startURLObservation(_ webView: WKWebView) {
-            urlObservation = webView.observe(\.url, options: [.new]) { [weak self] wv, change in
+            urlObservation = webView.observe(\.url, options: [.new]) { [weak self] wv, _ in
                 guard let self, let url = wv.url else { return }
                 self.checkLoginSuccess(webView: wv, url: url)
             }
         }
+
+        // MARK: - WKNavigationDelegate
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
             guard let url = webView.url else { return }
             checkLoginSuccess(webView: webView, url: url)
         }
 
+        // MARK: - WKUIDelegate (OAuth popup handling)
+
+        func webView(_ webView: WKWebView,
+                     createWebViewWith configuration: WKWebViewConfiguration,
+                     for navigationAction: WKNavigationAction,
+                     windowFeatures: WKWindowFeatures) -> WKWebView? {
+            if let url = navigationAction.request.url {
+                webView.load(URLRequest(url: url))
+            }
+            return nil
+        }
+
+        // MARK: - Detection
+
         private func checkLoginSuccess(webView: WKWebView, url: URL) {
             guard !hasReported else { return }
             guard let host = url.host, host.contains("claude.ai") else { return }
-            let path = url.path
-            guard !path.contains("/login"), !path.contains("/oauth"), !path.contains("/auth/") else { return }
 
-            hasReported = true
-
-            webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { cookies in
+            webView.configuration.websiteDataStore.httpCookieStore.getAllCookies { [weak self] cookies in
+                guard let self else { return }
                 let claudeCookies = cookies.filter { $0.domain.contains("claude.ai") }
+                let hasSession = claudeCookies.contains { cookie in
+                    let name = cookie.name.lowercased()
+                    return name.contains("sessionkey") || name.contains("session_key")
+                }
+                guard hasSession else {
+                    self.schedulePoll(webView: webView)
+                    return
+                }
+                self.hasReported = true
+                self.stopPoll()
                 Task { @MainActor in
                     self.onLoginSuccess(claudeCookies)
                 }
             }
         }
 
+        private func schedulePoll(webView: WKWebView) {
+            guard pollTimer == nil else { return }
+            let timer = Timer(timeInterval: 1.0, repeats: true) { [weak self, weak webView] _ in
+                guard let self, let wv = webView, let url = wv.url else { return }
+                self.checkLoginSuccess(webView: wv, url: url)
+            }
+            RunLoop.main.add(timer, forMode: .common)
+            pollTimer = timer
+        }
+
+        private func stopPoll() {
+            pollTimer?.invalidate()
+            pollTimer = nil
+        }
+
         deinit {
             urlObservation?.invalidate()
+            pollTimer?.invalidate()
         }
     }
 }
