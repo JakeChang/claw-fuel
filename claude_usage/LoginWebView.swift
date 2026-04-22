@@ -5,28 +5,52 @@ import AppKit
 struct LoginWebView: View {
     var viewModel: UsageViewModel
     var closeWindow: () -> Void
+    @State private var loginSucceeded = false
 
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Text(String(localized: "login.title"))
-                    .font(.headline)
-                Spacer()
-                Button(String(localized: "login.cancel")) {
-                    closeWindow()
-                }
+        ZStack {
+            VStack(spacing: 0) {
+                HStack {
+                    Text(String(localized: "login.title"))
+                        .font(.headline)
+                    Spacer()
+                    Button(String(localized: "login.cancel")) {
+                        closeWindow()
+                    }
                     .buttonStyle(.borderless)
-            }
-            .padding(12)
-
-            Divider()
-
-            WebViewWrapper(
-                onLoginSuccess: { cookies in
-                    viewModel.handleLoginSuccess(cookies: cookies)
-                    closeWindow()
                 }
-            )
+                .padding(12)
+
+                Divider()
+
+                WebViewWrapper(
+                    onLoginSuccess: { cookies in
+                        viewModel.handleLoginSuccess(cookies: cookies)
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            loginSucceeded = true
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            closeWindow()
+                        }
+                    }
+                )
+            }
+
+            if loginSucceeded {
+                VStack(spacing: 12) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 56))
+                        .foregroundStyle(.green)
+                    Text(String(localized: "login.success"))
+                        .font(.title2.weight(.semibold))
+                    Text(String(localized: "login.success.hint"))
+                        .font(.callout)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(.regularMaterial)
+                .transition(.opacity)
+            }
         }
         .frame(width: 900, height: 700)
     }

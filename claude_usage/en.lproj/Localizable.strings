@@ -21,6 +21,8 @@
 "login.reconnect" = "Reconnect";
 "login.cancel" = "Cancel";
 "login.expired" = "Login expired, please reconnect";
+"login.success" = "Login Successful!";
+"login.success.hint" = "Click the menu bar icon to get started";
 
 /* Footer */
 "settings.title" = "Settings";
