@@ -22,7 +22,8 @@
 "login.cancel" = "取消";
 "login.expired" = "登入已過期，請重新連接";
 "login.success" = "登入成功！";
-"login.success.hint" = "點擊選單列圖示即可開始使用";
+"login.success.hint" = "點擊上方選單列圖示即可開始使用";
+"login.done" = "完成";
 
 /* Footer */
 "settings.title" = "設定";

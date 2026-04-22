@@ -29,23 +29,31 @@ struct LoginWebView: View {
                         withAnimation(.easeInOut(duration: 0.3)) {
                             loginSucceeded = true
                         }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                            closeWindow()
-                        }
                     }
                 )
             }
 
             if loginSucceeded {
-                VStack(spacing: 12) {
+                VStack(spacing: 20) {
                     Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 56))
+                        .font(.system(size: 64))
                         .foregroundStyle(.green)
                     Text(String(localized: "login.success"))
-                        .font(.title2.weight(.semibold))
-                    Text(String(localized: "login.success.hint"))
-                        .font(.callout)
-                        .foregroundStyle(.secondary)
+                        .font(.title.weight(.semibold))
+                    VStack(spacing: 6) {
+                        Text(String(localized: "login.success.hint"))
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                        Image(systemName: "arrow.up")
+                            .font(.title2)
+                            .foregroundStyle(.secondary)
+                    }
+                    Button(String(localized: "login.done")) {
+                        closeWindow()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                    .padding(.top, 8)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(.regularMaterial)
