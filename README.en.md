@@ -20,6 +20,7 @@ Claw Fuel is a macOS menu bar application that keeps you informed about your Cla
 - **Hourly breakdown** — Bar chart showing per-hour usage with peak hour indicator
 - **Smart notifications** — Alerts at 90% usage and reminders on quota reset
 - **Launch at login** — Native macOS login item support
+- **Auto-update** — Built-in Sparkle updater notifies you when a new version is available
 - **Bilingual** — Full localization in Traditional Chinese and English
 
 ## Requirements
@@ -31,9 +32,10 @@ Claw Fuel is a macOS menu bar application that keeps you informed about your Cla
 
 ### Download (Recommended)
 
-1. Go to [Releases](https://github.com/JakeChang/claw-fuel/releases) and download the latest `Claw-Fuel.zip`
-2. Unzip and move `Claw-Fuel.app` to `/Applications/`
-3. Since this app is not notarized by Apple, run the following in Terminal before opening it:
+1. Go to [Releases](https://github.com/JakeChang/claw-fuel/releases) and download the latest `Claw-Fuel.dmg`
+2. Open the DMG and drag `Claw-Fuel.app` into your Applications folder
+3. **Before opening for the first time**, you must run the following command or macOS will block the app:
+   - Open Terminal, paste the command below, and press Enter:
    ```bash
    xattr -cr /Applications/Claw-Fuel.app
    ```
@@ -67,6 +69,7 @@ Claw Fuel is a macOS menu bar application that keeps you informed about your Cla
 | Notifications | UserNotifications |
 | Launch at login | ServiceManagement |
 | State management | @Observable (Observation framework) |
+| Auto-update | Sparkle 2 |
 
 ## License
 

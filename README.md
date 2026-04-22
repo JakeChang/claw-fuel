@@ -20,6 +20,7 @@ Claw Fuel 是一款 macOS 選單列應用程式，讓你隨時掌握 Claude AI �
 - **每小時用量分析** — 柱狀圖呈現每小時用量，標示尖峰時段
 - **智慧通知** — 用量達 90% 時發出警告，額度重置時自動提醒
 - **開機自動啟動** — 支援 macOS 原生「登入時啟動」
+- **自動更新** — 內建 Sparkle 更新機制，有新版本時自動通知
 - **雙語支援** — 繁體中文與英文完整在地化
 
 ## 系統需求
@@ -31,9 +32,10 @@ Claw Fuel 是一款 macOS 選單列應用程式，讓你隨時掌握 Claude AI �
 
 ### 直接下載（推薦）
 
-1. 前往 [Releases](https://github.com/JakeChang/claw-fuel/releases) 下載最新的 `Claw-Fuel.zip`
-2. 解壓縮後將 `Claw-Fuel.app` 移至 `/Applications/`
-3. 由於本應用程式未經 Apple 公證，首次開啟前需在終端機執行：
+1. 前往 [Releases](https://github.com/JakeChang/claw-fuel/releases) 下載最新的 `Claw-Fuel.dmg`
+2. 開啟 DMG，將 `Claw-Fuel.app` 拖入 Applications 資料夾
+3. **首次開啟前必須執行以下步驟**，否則 macOS 會阻擋啟動：
+   - 開啟終端機（Terminal），貼上以下指令並按 Enter：
    ```bash
    xattr -cr /Applications/Claw-Fuel.app
    ```
@@ -67,6 +69,7 @@ Claw Fuel 是一款 macOS 選單列應用程式，讓你隨時掌握 Claude AI �
 | 通知 | UserNotifications |
 | 開機啟動 | ServiceManagement |
 | 狀態管理 | @Observable（Observation 框架） |
+| 自動更新 | Sparkle 2 |
 
 ## License
 
