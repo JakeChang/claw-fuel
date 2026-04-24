@@ -35,17 +35,20 @@ jobs:
           tar -xf sparkle.tar.xz -C sparkle_tools
           echo "SPARKLE_BIN=$PWD/sparkle_tools/bin" >> $GITHUB_ENV
 
-      - name: Build app
+      - name: Build app (Universal Binary)
         run: |
           xcodebuild \
             -project claude_usage.xcodeproj \
             -scheme claude_usage \
             -configuration Release \
             -derivedDataPath /tmp/build \
+            ARCHS="arm64 x86_64" \
+            ONLY_ACTIVE_ARCH=NO \
             CODE_SIGN_IDENTITY="-" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            MARKETING_VERSION=${{ env.VERSION }}
+            MARKETING_VERSION=${{ env.VERSION }} \
+            CURRENT_PROJECT_VERSION=${{ env.VERSION }}
 
       - name: Find built app
         run: |
