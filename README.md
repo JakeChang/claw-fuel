@@ -1,17 +1,70 @@
 # Claw Fuel
 
-Claude AI 用量監控工具 — 在 macOS 選單列即時追蹤你的 Claude 使用額度。
+[English](#english) | [繁體中文](#繁體中文)
 
-[English](README.en.md)
+---
+
+## English
+
+> A macOS menu bar app for real-time Claude AI usage monitoring — track your quota, view trends, and get notified before you run out.
+
+Built with **SwiftUI + MenuBarExtra**, a lightweight menu bar tool designed for Claude AI power users.
 
 ![screen1](screen1.png)
 ![screen2](screen2.png)
 
-## 簡介
+### Features
 
-Claw Fuel 是一款 macOS 選單列應用程式，讓你隨時掌握 Claude AI 的 API 使用狀況。透過簡潔的選單列圖示與彈出式面板，你可以即時查看剩餘額度、使用趨勢，並在額度即將用盡時收到通知。
+- **Menu Bar at a Glance** — Icon and percentage with color-coded levels (green → orange → red)
+- **Multi-quota Tracking** — Monitor Session (5-hour), Weekly (7-day), and Sonnet Weekly limits simultaneously
+- **Trend Charts** — Historical usage over 24h / 3d / 7d with area and line charts
+- **Usage Projection** — Estimates when your quota will be exhausted based on current rate
+- **Hourly Breakdown** — Bar chart showing per-hour usage with peak hour indicator
+- **Smart Notifications** — Alerts at 90% usage and reminders on quota reset
+- **Launch at Login** — Native macOS login item support
+- **Auto Update** — Built-in Sparkle updater notifies you when a new version is available
+- **Bilingual** — Full localization in Traditional Chinese and English
 
-## 功能特色
+### Download
+
+Go to [Releases](https://github.com/JakeChang/claw-fuel/releases/latest) to download the latest DMG.
+
+Supports macOS 15+ / Apple Silicon & Intel.
+
+On first launch, run:
+
+```
+xattr -cr /Applications/Claw-Fuel.app
+```
+
+### Setup
+
+1. Open the app, click the menu bar icon, and select "Connect Claude" to log in
+2. Once authenticated, usage tracking starts automatically
+
+### Development
+
+1. Clone the repo and open `claude_usage.xcodeproj` in Xcode
+2. Select the **Claw Fuel** scheme and press `Cmd+R` to run
+
+**Requirements:** Xcode 16+, macOS 15.0+, Swift 5.0
+
+### License
+
+MIT
+
+---
+
+## 繁體中文
+
+> macOS 選單列 Claude AI 用量監控工具 — 即時追蹤額度、查看趨勢，額度即將用盡時自動通知。
+
+基於 **SwiftUI + MenuBarExtra** 打造，專為 Claude AI 重度使用者設計的輕量選單列工具。
+
+![screen1](screen1.png)
+![screen2](screen2.png)
+
+### 功能
 
 - **選單列即時顯示** — 圖示與百分比一目瞭然，依使用量變色（綠 → 橘 → 紅）
 - **多維度額度追蹤** — 同時監控 Session（5 小時）、Weekly（7 天）及 Sonnet Weekly 額度
@@ -23,54 +76,30 @@ Claw Fuel 是一款 macOS 選單列應用程式，讓你隨時掌握 Claude AI �
 - **自動更新** — 內建 Sparkle 更新機制，有新版本時自動通知
 - **雙語支援** — 繁體中文與英文完整在地化
 
-## 系統需求
+### 下載
 
-- macOS 15.0 或以上
-- Xcode 16 或以上（編譯用）
+前往 [Releases](https://github.com/JakeChang/claw-fuel/releases/latest) 下載最新版 DMG。
 
-## 安裝與使用
+支援 macOS 15+ / Apple Silicon & Intel。
 
-### 直接下載（推薦）
+首次安裝需執行：
 
-1. 前往 [Releases](https://github.com/JakeChang/claw-fuel/releases) 下載最新的 `Claw-Fuel.dmg`
-2. 開啟 DMG，將 `Claw-Fuel.app` 拖入 Applications 資料夾
-3. **首次開啟前必須執行以下步驟**，否則 macOS 會阻擋啟動：
-   - 開啟終端機（Terminal），貼上以下指令並按 Enter：
-   ```bash
-   xattr -cr /Applications/Claw-Fuel.app
-   ```
-4. 開啟 App，在選單列點擊圖示，選「連接 Claude」進行登入
+```
+xattr -cr /Applications/Claw-Fuel.app
+```
 
-### 從原始碼編譯
+### 設定
 
-1. Clone 此專案：
-   ```bash
-   git clone https://github.com/JakeChang/claw-fuel.git
-   ```
-2. 用 Xcode 開啟 `claude_usage.xcodeproj`
-3. Build & Run（⌘R）
-4. 在選單列點擊 Claw Fuel 圖示，點選「連接 Claude」進行登入
-5. 登入成功後即自動開始追蹤用量
+1. 開啟 App，在選單列點擊圖示，選「連接 Claude」進行登入
+2. 登入成功後即自動開始追蹤用量
 
-## 運作原理
+### 開發
 
-1. 透過內建瀏覽器登入 claude.ai，取得認證 Cookie
-2. 定期（每 5 分鐘）呼叫 Claude API 取得最新用量資料
-3. 解析 Session / Weekly / Sonnet Weekly 三種額度的使用率與重置時間
-4. 將歷史用量記錄至本地端，供趨勢圖表與預測功能使用
+1. Clone 專案後，用 Xcode 開啟 `claude_usage.xcodeproj`
+2. 選擇 Scheme **Claw Fuel**，按 `Cmd+R` 即可執行
 
-## 技術架構
+**需求：** Xcode 16+、macOS 15.0+、Swift 5.0
 
-| 項目 | 技術 |
-|------|------|
-| UI 框架 | SwiftUI + MenuBarExtra |
-| 圖表 | SwiftUI Charts |
-| 認證 | WebKit（WKWebView OAuth 登入） |
-| 通知 | UserNotifications |
-| 開機啟動 | ServiceManagement |
-| 狀態管理 | @Observable（Observation 框架） |
-| 自動更新 | Sparkle 2 |
-
-## License
+### License
 
 MIT
